@@ -81,7 +81,7 @@ public class UserController {
     
     @GetMapping("/ourApp/getAllUsers/{userName}")
     public User getUsers(@PathVariable String userName) throws Exception {
-    	logger.debug("getUsers {}",userName);
+    	logger.debug("getUsers is: {}",userName);
     	User user = userRegistartionService.findUser(userName);
         return user; 
     }
