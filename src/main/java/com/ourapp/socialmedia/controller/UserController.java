@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ourapp.socialmedia.entity.User;
@@ -23,6 +24,7 @@ import com.ourapp.socialmedia.view.LoginRequestView;
 
 
 @RestController
+@RequestMapping("/ourApp/user")
 public class UserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -36,7 +38,7 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
     
-    @PostMapping("/ourApp/register")
+    @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
     	try {
     		logger.debug("UserController register user Details {}",user);
@@ -47,7 +49,7 @@ public class UserController {
         }
     }
     
-    @PostMapping("/ourApp/login")
+    @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody LoginRequestView loginRequestView) {
         try {
         	logger.debug("UserController login user Details {}",loginRequestView);
@@ -57,7 +59,7 @@ public class UserController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtUtil.generateToken(loginRequestView.getUserName());
             User user = userRegistartionService.findUser(loginRequestView.getUserName());
-            return ResponseEntity.ok(new JwtResponse(jwt, user.getEmailId(), user.getUserName()));
+            return ResponseEntity.ok(new JwtResponse(jwt, user.getEmailId(), user.getUserName(),user.getUserPosts()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -65,7 +67,7 @@ public class UserController {
     
     
 
-    @PostMapping("/ourApp/authenticate")
+    @PostMapping("/authenticate")
     public String generateToken(@RequestBody LoginRequestView loginRequestView) throws Exception {
     	logger.debug("loginRequestView {}",loginRequestView);
         try {
@@ -79,7 +81,7 @@ public class UserController {
         return jwtUtil.generateToken(loginRequestView.getUserName());
     }
     
-    @GetMapping("/ourApp/getAllUsers/{userName}")
+    @GetMapping("/getAllUsers/{userName}")
     public User getUsers(@PathVariable String userName) throws Exception {
     	logger.debug("getUsers is: {}",userName);
     	User user = userRegistartionService.findUser(userName);
