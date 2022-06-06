@@ -41,10 +41,6 @@ public class User implements Serializable {
     
     private String password;
     
-    private int secretQuestionId;
-    
-    private String secretQuesAnswer;
-    
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	@JsonIgnore
 	private List<UserPost> userPosts;

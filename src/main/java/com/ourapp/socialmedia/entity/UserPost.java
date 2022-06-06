@@ -39,6 +39,7 @@ public class UserPost implements Serializable {
     
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
 	private User user;
 	
 }
