@@ -1,6 +1,7 @@
 package com.ourapp.socialmedia.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,8 +14,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -37,9 +40,14 @@ public class UserPost implements Serializable {
     
     private String postDescription;
     
+    private String postCreationDate;
+    
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
 	private User user;
 	
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Transient
+    private String userName;
 }

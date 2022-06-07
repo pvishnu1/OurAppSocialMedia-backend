@@ -1,5 +1,7 @@
 package com.ourapp.socialmedia.controller;
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -43,6 +45,11 @@ public class PostController {
     			UserPost userPost = new UserPost();
     			userPost.setPostTitle(postRequestView.getPostTitle());
     			userPost.setPostDescription(postRequestView.getPostDescription());
+    			DateFormat Date = DateFormat.getDateInstance();
+    			Calendar cals = Calendar.getInstance();
+    			System.out.println("The original Date: " + cals.getTime());
+    			String currentDate = Date.format(cals.getTime());
+    			userPost.setPostCreationDate(currentDate);
     			userPost.setUser(user);
     			//logger.debug("PostController UserPost Details {}",userPost);
     			return ResponseEntity.ok(userPostRepository.save(userPost));
@@ -64,6 +71,9 @@ public class PostController {
     		logger.debug("PostController getPostsByUser user Details {}",user);
     		if(user != null) {
     			List<UserPost> userPostsOpt = userPostRepository.findByUser(user);
+    			for(UserPost userPost : userPostsOpt) {
+    				userPost.setUserName(user.getUserName());
+    			}
 	            responseObj.setStatus("success");
 	            responseObj.setMessage("success");
 	            responseObj.setPayload(userPostsOpt);
