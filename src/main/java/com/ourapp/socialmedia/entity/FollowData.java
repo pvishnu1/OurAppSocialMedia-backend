@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 public class FollowData {
 	
-	private Long follower;
+	private String userName;
 	
-	private Long following;
+	private Long id;
 
 }
